@@ -23,3 +23,6 @@ run:
 
 down:
 	${DOCKER_COMPOSE} down
+
+exec/app_bash:
+	docker exec -it web-chat-backend-php-1 /bin/bash

@@ -24,6 +24,8 @@ services:
       args:
         - PUID=${PUID}
         - PGID=${PGID}
+    environment:
+      PHP_IDE_CONFIG: "serverName=${XDEBUG_SERVER_NAME}"
     volumes:
       - ./app:/var/www/web-chat-backend
 
