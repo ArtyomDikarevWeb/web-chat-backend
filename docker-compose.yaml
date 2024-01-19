@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: "nginx:stable-alpine"
+    ports:
+      - "${NGINX_HOST_HTTP_PORT}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./app:/var/www/web-chat-backend
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "${MYSQL_HOST_PORT}:3306"
+    env_file:
+      - mysql/mysql.env
+    volumes:
+      - db:/var/lib/mysql
+    user: "${PUID}:${PGID}"
+  php:
+    build:
+      context: .
+      dockerfile: php/Dockerfile
+      args:
+        - PUID=${PUID}
+        - PGID=${PGID}
+    volumes:
+      - ./app:/var/www/web-chat-backend
+
+  composer:
+    build:
+      context: .
+      dockerfile: php/composer.Dockerfile
+    volumes:
+      - ./app:/var/www/web-chat-backend
+    user: "${PUID}:${PGID}"
+
+volumes:
+  db:
